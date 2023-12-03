@@ -1,6 +1,6 @@
 {
   "name": "react-modal-observer",
-  "version": "0.9.35",
+  "version": "0.9.37",
   "description": "Package to handle modals in react with javascript observer pattern.",
   "repository": {
     "type": "git",
@@ -9,10 +9,10 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "scripts": { 
+  "scripts": {
     "clean": "rimraf dist/",
     "copy": "copyfiles -u 1 src/**/*.html src/**/*.css dist/",
-    "build": "npm run clean && tsc && npm run copy" 
+    "build": "npm run clean && tsc && npm run copy"
   },
   "author": "Jonathan Picone",
   "license": "MIT",
