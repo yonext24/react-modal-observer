@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ComponentType, ComponentTypeWithIdAndOptions, ModalOptions, UnknownProps } from './types'
+import { ComponentType, ComponentTypeWithIdAndOptions, ModalOptions } from './types'
 
 let modalCount = 1
 
@@ -11,7 +11,7 @@ type NotifyType = {
 
 export class ModalObserver {
   subscribers: Array<(modal: NotifyType) => void>
-  modals: Array<ComponentTypeWithIdAndOptions<any>>
+  modals: Array<ComponentTypeWithIdAndOptions<unknown>>
 
   constructor() {
     this.subscribers = []
@@ -30,7 +30,7 @@ export class ModalObserver {
     this.subscribers.forEach((subscriber) => subscriber(data))
   }
 
-  add = <T extends UnknownProps>(Component: ComponentType<T>, options?: ModalOptions, id?: string | number) => {
+  add = (Component: ComponentType<any>, options?: ModalOptions, id?: string | number) => {
     const modalId = id ?? modalCount++
 
     const modal = { ...Component, id: modalId, options }

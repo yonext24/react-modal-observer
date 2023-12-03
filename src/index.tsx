@@ -3,25 +3,18 @@
 import React, { useEffect, useState } from 'react'
 import { ModalObserver } from './state'
 import { Modal } from './Modal'
-import {
-  ComponentType,
-  ComponentTypeWithIdAndOptions,
-  ModalOptions,
-  ModalReturnProps,
-  ReactElementType,
-  UnknownProps
-} from './types'
+import { ComponentType, ComponentTypeWithIdAndOptions, ModalOptions, ModalReturnProps, ReactElementType } from './types'
 
 export const ModalsState = new ModalObserver()
 
-const addModal = <T extends ModalReturnProps & UnknownProps>(
+const addModal = <T extends ModalReturnProps & unknown>(
   Element: ReactElementType<T>,
   props: Omit<T, 'closeModal'>,
   options: ModalOptions = {},
   id?: string | number
 ) => {
   const modal: ComponentType<T> = { JSX: Element, props }
-  ModalsState.add<T>(modal, options, id)
+  ModalsState.add(modal, options, id)
 }
 const removeModal = (id: string | number) => {
   ModalsState.remove(id)
