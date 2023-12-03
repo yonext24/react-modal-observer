@@ -1,3 +1,5 @@
+'use client'
+
 import { ModalBackgroundBaseProps } from 'types'
 import React from 'react'
 

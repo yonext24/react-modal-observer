@@ -1,3 +1,5 @@
+'use client'
+
 /* eslint-disable react/display-name */
 import React, { Suspense } from 'react'
 import './global.css'

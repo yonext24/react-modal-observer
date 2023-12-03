@@ -1,3 +1,5 @@
+"use client"
+
 /* eslint-disable no-constant-condition */
 import { useCallback, useEffect, useRef, useState } from 'react'
 
