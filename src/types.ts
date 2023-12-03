@@ -9,7 +9,7 @@ export type UnknownProps = { [key: string]: unknown }
 
 export type ReactElementType<Props = UnknownProps> =
   | FunctionComponent<Props>
-  | LazyExoticComponent<FunctionComponent<T>>
+  | LazyExoticComponent<FunctionComponent<Props>>
 
 export type ComponentType<Props = UnknownProps> = {
   JSX: ReactElementType<Props>
