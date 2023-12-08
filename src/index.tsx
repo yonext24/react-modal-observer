@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { ModalObserver } from './state'
-import { Modal } from './Modal'
+import { Modal } from './components/Modal'
 import { ComponentType, ComponentTypeWithIdAndOptions, ModalOptions, ModalReturnProps, ReactElementType } from './types'
 
 export const ModalsState = new ModalObserver()

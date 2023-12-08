@@ -4,8 +4,8 @@
 import React, { Suspense } from 'react'
 import './global.css'
 
-import { ModalOptions, ModalReturnProps, ReactElementType, UnknownProps } from './types'
-import { useModalLogic } from './useModalLogic'
+import { ModalOptions, ModalReturnProps, ReactElementType, UnknownProps } from '../types'
+import { useModalLogic } from '../hooks/useModalLogic'
 import { ModalBackground } from './ModalBackground'
 
 export const Modal = <T extends ModalReturnProps & UnknownProps>(
