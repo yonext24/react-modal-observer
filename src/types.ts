@@ -2,7 +2,7 @@ import { FunctionComponent, LazyExoticComponent, ReactNode } from 'react'
 
 export type DefaultModalProps = {
   closeModal: () => void
-  delay?: number
+  duration?: number
 }
 
 export type UnknownProps = { [key: string]: unknown }
@@ -24,19 +24,18 @@ export interface ModalReturnProps {
   closeModal: () => void
 }
 
+export type AnimationType = 'fade' | 'none' | 'slide-left' | 'slide-right'
+
 export type ModalBackgroundBaseProps = {
   backgroundColor?: string
   zIndex?: number
-  animationType?:
-    | 'fade'
-    | 'none'
-    | {
-        type: 'slide'
-        origin: 'left' | 'right'
-      }
-  delay?: number
+  animationType?: AnimationType
+  duration?: number
+  noScroll?: boolean
+  timingFunction?: string
 }
 
 export interface ModalOptions extends ModalBackgroundBaseProps {
   fallback?: ReactNode
+  Spinner?: ReactNode
 }

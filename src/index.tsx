@@ -22,10 +22,13 @@ const removeModal = (id: string | number) => {
 
 export function Modals({
   backgroundColor: rootBackgroundColor,
-  delay: rootDelay,
+  duration: rootDuration,
   fallback: rootFallback,
   zIndex: rootZIndex,
-  animationType: rootAnimationType
+  animationType: rootAnimationType,
+  noScroll: rootNoScroll,
+  timingFunction: rootTimingFunction,
+  Spinner: rootSpinner
 }: ModalOptions) {
   const [modals, setModals] = useState<Array<ComponentTypeWithIdAndOptions>>([])
 
@@ -49,18 +52,21 @@ export function Modals({
 
         const options = {
           backgroundColor: modalOptions.backgroundColor ?? rootBackgroundColor,
-          delay: modalOptions.delay ?? rootDelay,
+          duration: modalOptions.duration ?? rootDuration,
           fallback: modalOptions.fallback ?? rootFallback,
           zIndex: modalOptions.zIndex ?? rootZIndex,
-          animationType: modalOptions.animationType ?? rootAnimationType
+          animationType: modalOptions.animationType ?? rootAnimationType,
+          noScroll: modalOptions.noScroll ?? rootNoScroll,
+          timingFunction: modalOptions.timingFunction ?? rootTimingFunction,
+          Spinner: modalOptions.Spinner ?? rootSpinner
         }
 
-        const closeModal = () => {
+        const localRemoveModal = () => {
           removeModal(rawModal.id)
         }
 
         const MyModal = Modal(rawModal.JSX, options)
-        return <MyModal closeModal={closeModal} {...rawModal.props} key={rawModal.id} />
+        return <MyModal closeModal={localRemoveModal} {...rawModal.props} key={rawModal.id} />
       })}
     </>
   )

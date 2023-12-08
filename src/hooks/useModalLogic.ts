@@ -1,15 +1,16 @@
-"use client"
+'use client'
 
 /* eslint-disable no-constant-condition */
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface UseModalLogicProps {
-  closeModal: () => void
-  delay?: number
+  removeModal: () => void
+  duration?: number
+  noScroll?: boolean
 }
 
-export function useModalLogic({ closeModal: rawCloseModal, delay = 250 }: UseModalLogicProps) {
-  const [animating, setAnimating] = useState<boolean>(false)
+export function useModalLogic({ removeModal, duration = 250, noScroll = false }: UseModalLogicProps) {
+  const [shouldClose, setShouldClose] = useState<boolean>(false)
 
   const hasStartAnimationEnded = useRef<boolean>(false)
 
@@ -27,29 +28,33 @@ export function useModalLogic({ closeModal: rawCloseModal, delay = 250 }: UseMod
     if (!hasStartAnimationEnded.current) {
       await waitTillAnimationEnds()
     }
-
-    setAnimating(true)
-    setTimeout(() => {
-      rawCloseModal()
-    }, delay)
-  }, [rawCloseModal])
+    setShouldClose(true)
+  }, [removeModal])
 
   const closeModal = useCallback(() => {
     void closeModalWithPromise()
-  }, [animating, closeModalWithPromise])
+  }, [shouldClose, closeModalWithPromise])
+
+  const modalRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    if (!modalRef.current) return
     if (document) {
       try {
-        // eslint-disable-next-line no-extra-semi
-        ;(document.activeElement as HTMLElement).blur()
+        if (!modalRef.current?.contains(document.activeElement)) {
+          // eslint-disable-next-line no-extra-semi
+          ;(document.activeElement as HTMLElement).blur()
+        }
       } catch {
         // ignore
       }
     }
+  }, [modalRef.current])
+
+  useEffect(() => {
     const timeoutId = setTimeout(() => {
       hasStartAnimationEnded.current = true
-    }, delay)
+    }, duration)
 
     if (window === undefined) return
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -60,11 +65,27 @@ export function useModalLogic({ closeModal: rawCloseModal, delay = 250 }: UseMod
 
     window.addEventListener('keydown', handleKeyDown)
 
+    const html = document.querySelector('html') as HTMLHtmlElement
+
+    let previousOverflow: string | null = null
+    let previousPaddingRight: string | null = null
+
+    if (noScroll) {
+      previousOverflow = html.style.overflow
+      previousPaddingRight = html.style.paddingRight
+      html.style.overflow = 'hidden'
+      html.style.paddingRight = '15px'
+    }
+
     return () => {
       clearTimeout(timeoutId)
       window.removeEventListener('keydown', handleKeyDown)
+      if (noScroll) {
+        html.style.overflow = previousOverflow || 'auto'
+        html.style.paddingRight = previousPaddingRight || ''
+      }
     }
   }, [])
 
-  return { animating, closeModal }
+  return { shouldClose, closeModal, modalRef }
 }

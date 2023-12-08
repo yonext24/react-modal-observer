@@ -1,27 +1,37 @@
 'use client'
 
-import { ModalBackgroundBaseProps } from 'types'
+import { ModalBackgroundBaseProps } from '../types'
 import React from 'react'
+import { animationTypeMapper } from '../utils/consts'
+import { cssTransition } from '../utils/cssTransition'
 
 export interface ModalBackgroundProps extends ModalBackgroundBaseProps {
   closeModal: () => void
+  onTransitionEnd: () => void
   children: React.ReactNode
-  animating: boolean
+  shouldClose: boolean
+  modalRef: React.RefObject<HTMLDivElement>
 }
+
+const FadeTransition = cssTransition(animationTypeMapper['fade'])
 
 export function ModalBackground({
   children,
   closeModal,
-  animating,
-  delay = 250,
+  onTransitionEnd,
+  shouldClose,
+  duration = 250,
   backgroundColor = 'rgba(0,0,0,.5)',
   zIndex = 100,
-  animationType = 'fade'
+  animationType = 'fade',
+  modalRef,
+  timingFunction
 }: ModalBackgroundProps) {
-  const className =
-    typeof animationType === 'string'
-      ? `modalBackground ${animationType}`
-      : `modalBackground ${animationType.type}-${animationType.origin}`
+  const { enterClassName, exitClassName, className } = animationTypeMapper[animationType]
+  const Transition = animationType === 'fade' ? FadeTransition : cssTransition({ enterClassName, exitClassName })
+
+  const modalContainerRef = React.useRef<HTMLDivElement>(null)
+  const backgroundRef = React.useRef<HTMLDivElement>(null)
 
   return (
     <div
@@ -29,16 +39,26 @@ export function ModalBackground({
       style={{
         zIndex
       }}
-      className={className}
-      data-animating={animating}
+      ref={modalRef}
+      className={`react_modal_background ${className}`}
     >
-      <div
-        id="modal-background-background"
-        style={{ transitionDuration: `${delay}ms`, animationDuration: `${delay}ms`, backgroundColor }}
-      />
-      <div id="modal" style={{ transitionDuration: `${delay}ms`, animationDuration: `${delay}ms` }}>
-        {children}
-      </div>
+      <FadeTransition elementRef={backgroundRef} shouldClose={shouldClose} onEnd={() => {}}>
+        <div
+          id="modal_background_background"
+          ref={backgroundRef}
+          style={{ backgroundColor, animationDuration: `${duration}ms`, animationTimingFunction: timingFunction }}
+        />
+      </FadeTransition>
+      <Transition elementRef={modalContainerRef} shouldClose={shouldClose} onEnd={onTransitionEnd}>
+        <div
+          id="modal"
+          ref={modalContainerRef}
+          style={{ animationDuration: `${duration}ms`, animationTimingFunction: timingFunction }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {children}
+        </div>
+      </Transition>
     </div>
   )
 }

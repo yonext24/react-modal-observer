@@ -2,43 +2,43 @@
 
 /* eslint-disable react/display-name */
 import React, { Suspense } from 'react'
-import './global.css'
+import '../css/global.css'
 
 import { ModalOptions, ModalReturnProps, ReactElementType, UnknownProps } from '../types'
 import { useModalLogic } from '../hooks/useModalLogic'
 import { ModalBackground } from './ModalBackground'
 
+// Maybe i should have done this a fordwardRef
 export const Modal = <T extends ModalReturnProps & UnknownProps>(
   WrappedComponent: ReactElementType,
   options?: ModalOptions
 ) => {
-  const delay = options?.delay ?? 250
-  const Fallback = options?.fallback ?? <div className="spinner" />
+  const duration = options?.duration ?? 250
   const backgroundColor = options?.backgroundColor ?? 'rgba(0, 0, 0, 0.5)'
   const zIndex = options?.zIndex ?? 1000
   const animationType = options?.animationType ?? 'fade'
+  const noScroll = options?.noScroll ?? false
+  const timingFunction = options?.timingFunction ?? 'ease-in-out'
+  const Fallback = options?.fallback ?? options?.Spinner ?? <div className="spinner" />
 
-  return ({ closeModal: propsCloseModal, ...props }: T) => {
-    const { animating, closeModal } = useModalLogic({ closeModal: propsCloseModal, delay })
+  return ({ closeModal: removeModal, ...props }: T) => {
+    const { closeModal, shouldClose, modalRef } = useModalLogic({ removeModal, duration, noScroll })
 
     return (
       <ModalBackground
-        animating={animating}
+        timingFunction={timingFunction}
+        modalRef={modalRef}
+        shouldClose={shouldClose}
+        onTransitionEnd={removeModal}
         closeModal={closeModal}
-        delay={delay}
+        duration={duration}
         backgroundColor={backgroundColor}
         animationType={animationType}
         zIndex={zIndex}
       >
-        <div
-          onClick={(e) => {
-            e.stopPropagation()
-          }}
-        >
-          <Suspense fallback={Fallback}>
-            <WrappedComponent {...props} closeModal={closeModal} />
-          </Suspense>
-        </div>
+        <Suspense fallback={Fallback}>
+          <WrappedComponent {...props} closeModal={closeModal} />
+        </Suspense>
       </ModalBackground>
     )
   }
