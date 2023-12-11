@@ -1,6 +1,6 @@
 {
   "name": "react-modal-observer",
-  "version": "0.9.43",
+  "version": "0.9.44",
   "description": "Package to handle modals in react with javascript observer pattern.",
   "repository": {
     "type": "git",
@@ -16,9 +16,8 @@
   },
   "author": "Jonathan Picone",
   "license": "MIT",
-  "dependencies": {
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+  "peerDependencies": {
+    "react": "18.2.0"
   },
   "devDependencies": {
     "copyfiles": "^2.4.1",

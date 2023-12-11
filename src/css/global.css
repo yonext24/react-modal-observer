@@ -19,6 +19,7 @@
 .react_modal_background > #modal {
   position: relative;
   z-index: 2;
+  max-height: 100%;
 }
 .react_modal_animate_fill_both {
   animation-fill-mode: both;
