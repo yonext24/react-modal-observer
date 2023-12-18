@@ -15,6 +15,8 @@ $ yarn add react-modal-observer
 - You can pass down props to the modal component
 - Typescript support: It will infer the props of the modal component
 - You can set default styles for the modal container and overwrite them in the addModal function
+- You can set a custom animation for the modal
+- You can set a spinner component to show while the modal is loading
 
 ## Usage
 
@@ -30,13 +32,26 @@ export default function App() {
   return (
     <>
       <main>
-        <button onClick={}>Open Modal</button>
+        <button onClick={handleOpen}>Open Modal</button>
       </main>
 
       <Modals
         backgroundColor="rgba(0, 0, 0, 0.5)"
-        delay={250} // miliseconds
-        animationType='fade' // 'fade' | 'none' | { type: 'slide', origin: 'left' | 'right' }
+        duration={250} // miliseconds
+        /* NOTE: You can't use `animationType` at the same time as `customAnimation`. */
+        animationType="fade" // 'none' | 'fade' | 'fade-with-scale' | 'slide-left' | 'slide-right'
+        noScroll={true} // Prevents html scrolling when the modal is open
+        timingFunction="ease"
+        Spinner={<div className='spinner' />} // Component to show while the modal is loading
+        customAnimation={
+          parentClassName: 'page-center' // .page-center: { justify-content: center }
+          classNames: {
+            enter: 'custom-enter',
+            enterActive: 'custom-enter-active',
+            exit: 'custom-exit',
+            exitActive: 'custom-exit-active',
+          }
+        }
       />
     </>
   )
