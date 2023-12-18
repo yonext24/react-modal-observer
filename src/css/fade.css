@@ -1,26 +1,12 @@
-.react_modal_fadeIn {
-  animation-name: react_modal_fadeIn;
-  animation-timing-function: ease-in-out;
+.react_modal_fade-initial {
+  opacity: 0;
 }
-.react_modal_fadeOut {
-  animation-name: react_modal_fadeOut;
-  animation-timing-function: ease-in-out;
-}
-
-@keyframes react_modal_fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+.react_modal_fade-enter {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
 }
 
-@keyframes react_modal_fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.react_modal_fade-exit-active {
+  opacity: 0;
+  transition: opacity 300ms ease-in;
 }

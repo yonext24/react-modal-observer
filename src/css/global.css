@@ -21,9 +21,6 @@
   z-index: 2;
   max-height: 100%;
 }
-.react_modal_animate_fill_both {
-  animation-fill-mode: both;
-}
 .react_modal_page_center {
   justify-content: center;
   align-items: center;

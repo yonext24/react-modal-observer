@@ -1,34 +1,47 @@
 'use client'
 
-import { ModalBackgroundBaseProps } from '../types'
-import React from 'react'
-import { animationTypeMapper } from '../utils/consts'
-import { cssTransition } from '../utils/cssTransition'
+import { CustomAnimationType, ModalBackgroundBaseProps } from '../types'
+import React, { useMemo } from 'react'
+import { FadeTransition, animationMapper } from './Transitions'
+import { getInitialClassName } from '../utils/consts'
+import { cssTransitionGenerator } from '../utils/cssTransition'
 
 export interface ModalBackgroundProps extends ModalBackgroundBaseProps {
   closeModal: () => void
   onTransitionEnd: () => void
   children: React.ReactNode
-  shouldClose: boolean
+  isIn: boolean
   modalRef: React.RefObject<HTMLDivElement>
+  customAnimation?: CustomAnimationType
 }
-
-const FadeTransition = cssTransition(animationTypeMapper['fade'])
 
 export function ModalBackground({
   children,
   closeModal,
   onTransitionEnd,
-  shouldClose,
+  isIn,
   duration = 250,
   backgroundColor = 'rgba(0,0,0,.5)',
   zIndex = 100,
   animationType = 'fade',
   modalRef,
-  timingFunction
+  timingFunction,
+  customAnimation
 }: ModalBackgroundProps) {
-  const { enterClassName, exitClassName, className } = animationTypeMapper[animationType]
-  const Transition = animationType === 'fade' ? FadeTransition : cssTransition({ enterClassName, exitClassName })
+  const { TransitionComponent, parentClassName, classNames } = useMemo(() => {
+    if (customAnimation !== undefined) {
+      const { parentClassName, classNames } = customAnimation
+      const TransitionComponent = cssTransitionGenerator({ classNames })
+      return {
+        TransitionComponent,
+        parentClassName,
+        classNames
+      }
+    }
+    return animationMapper[animationType]
+  }, [customAnimation, animationType])
+
+  const initialClassName = getInitialClassName(classNames)
 
   const modalContainerRef = React.useRef<HTMLDivElement>(null)
   const backgroundRef = React.useRef<HTMLDivElement>(null)
@@ -40,25 +53,30 @@ export function ModalBackground({
         zIndex
       }}
       ref={modalRef}
-      className={`react_modal_background ${className}`}
+      className={`react_modal_background ${parentClassName ?? ''}`}
     >
-      <FadeTransition elementRef={backgroundRef} shouldClose={shouldClose} onEnd={() => {}}>
+      <FadeTransition duration={duration} elementRef={backgroundRef} isIn={isIn} onEnd={() => {}}>
         <div
           id="modal_background_background"
           ref={backgroundRef}
-          style={{ backgroundColor, animationDuration: `${duration}ms`, animationTimingFunction: timingFunction }}
+          style={{ backgroundColor, transitionDuration: `${duration}ms`, transitionTimingFunction: timingFunction }}
         />
       </FadeTransition>
-      <Transition elementRef={modalContainerRef} shouldClose={shouldClose} onEnd={onTransitionEnd}>
+      <TransitionComponent duration={duration} elementRef={modalContainerRef} isIn={isIn} onEnd={onTransitionEnd}>
         <div
+          className={initialClassName}
           id="modal"
+          data-is-in={isIn}
           ref={modalContainerRef}
-          style={{ animationDuration: `${duration}ms`, animationTimingFunction: timingFunction }}
+          style={{
+            transitionDuration: `${duration}ms`,
+            transitionTimingFunction: timingFunction
+          }}
           onClick={(e) => e.stopPropagation()}
         >
           {children}
         </div>
-      </Transition>
+      </TransitionComponent>
     </div>
   )
 }

@@ -13,6 +13,9 @@ const addModal = <T extends ModalReturnProps & unknown>(
   options: ModalOptions = {},
   id?: string | number
 ) => {
+  if (options?.customAnimation !== undefined && options?.animationType !== undefined) {
+    throw new Error('You cant use customAnimation and animationType at the same time')
+  }
   const modal: ComponentType<T> = { JSX: Element, props }
   ModalsState.add(modal, options, id)
 }
@@ -28,7 +31,8 @@ export function Modals({
   animationType: rootAnimationType,
   noScroll: rootNoScroll,
   timingFunction: rootTimingFunction,
-  Spinner: rootSpinner
+  Spinner: rootSpinner,
+  customAnimation: rootCustomAnimation
 }: ModalOptions) {
   const [modals, setModals] = useState<Array<ComponentTypeWithIdAndOptions>>([])
 
@@ -58,7 +62,8 @@ export function Modals({
           animationType: modalOptions.animationType ?? rootAnimationType,
           noScroll: modalOptions.noScroll ?? rootNoScroll,
           timingFunction: modalOptions.timingFunction ?? rootTimingFunction,
-          Spinner: modalOptions.Spinner ?? rootSpinner
+          Spinner: modalOptions.Spinner ?? rootSpinner,
+          customAnimation: modalOptions.customAnimation ?? rootCustomAnimation
         }
 
         const localRemoveModal = () => {

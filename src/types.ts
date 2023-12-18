@@ -1,4 +1,5 @@
 import { FunctionComponent, LazyExoticComponent, ReactNode } from 'react'
+import { CSSTransitionClassNames } from 'react-transition-group/CSSTransition'
 
 export type DefaultModalProps = {
   closeModal: () => void
@@ -24,7 +25,7 @@ export interface ModalReturnProps {
   closeModal: () => void
 }
 
-export type AnimationType = 'fade' | 'none' | 'slide-left' | 'slide-right'
+export type AnimationType = 'fade' | 'fade-with-scale' | 'none' | 'slide-left' | 'slide-right'
 
 export type ModalBackgroundBaseProps = {
   backgroundColor?: string
@@ -35,7 +36,17 @@ export type ModalBackgroundBaseProps = {
   timingFunction?: string
 }
 
+export type CustomAnimationType = {
+  parentClassName?: string
+  classNames: ExtendedCSSTransitionClassNames | string
+}
+
 export interface ModalOptions extends ModalBackgroundBaseProps {
   fallback?: ReactNode
   Spinner?: ReactNode
+  customAnimation?: CustomAnimationType
+}
+
+export interface ExtendedCSSTransitionClassNames extends CSSTransitionClassNames {
+  initial?: string
 }

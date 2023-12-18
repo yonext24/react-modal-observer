@@ -4,36 +4,22 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface UseModalLogicProps {
-  removeModal: () => void
   duration?: number
   noScroll?: boolean
 }
 
-export function useModalLogic({ removeModal, duration = 250, noScroll = false }: UseModalLogicProps) {
-  const [shouldClose, setShouldClose] = useState<boolean>(false)
+export function useModalLogic({ duration = 250, noScroll = false }: UseModalLogicProps) {
+  const [isIn, setIsIn] = useState<boolean>(false)
+
+  useEffect(() => {
+    setIsIn(true)
+  }, [])
 
   const hasStartAnimationEnded = useRef<boolean>(false)
 
-  const waitTillAnimationEnds = async () => {
-    while (true) {
-      if (!hasStartAnimationEnded.current) {
-        await new Promise((resolve) => setTimeout(resolve, 100))
-      } else {
-        break
-      }
-    }
-  }
-
-  const closeModalWithPromise = useCallback(async () => {
-    if (!hasStartAnimationEnded.current) {
-      await waitTillAnimationEnds()
-    }
-    setShouldClose(true)
-  }, [removeModal])
-
   const closeModal = useCallback(() => {
-    void closeModalWithPromise()
-  }, [shouldClose, closeModalWithPromise])
+    setIsIn(false)
+  }, [setIsIn])
 
   const modalRef = useRef<HTMLDivElement>(null)
 
@@ -87,5 +73,5 @@ export function useModalLogic({ removeModal, duration = 250, noScroll = false }:
     }
   }, [])
 
-  return { shouldClose, closeModal, modalRef }
+  return { isIn, closeModal, modalRef }
 }

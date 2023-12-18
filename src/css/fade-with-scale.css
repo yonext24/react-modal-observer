@@ -1,0 +1,23 @@
+.react_modal_fade_with_scale-initial {
+  scale: 0.9;
+  opacity: 0;
+}
+.react_modal_fade_with_scale-enter {
+  scale: 1;
+  opacity: 1;
+  transition:
+    opacity 300ms ease-in,
+    scale 300ms ease-in;
+}
+
+.react_modal_fade_with_scale-exit {
+  opacity: 1;
+}
+
+.react_modal_fade_with_scale-exit-active {
+  opacity: 0;
+  scale: 0.9;
+  transition:
+    opacity 300ms ease-in,
+    scale 300ms ease-in;
+}

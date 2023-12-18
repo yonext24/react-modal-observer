@@ -1,60 +1,41 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react'
+import React from 'react'
+import { CSSTransition } from 'react-transition-group'
 import '../css/fade.css'
+import '../css/fade-with-scale.css'
 import '../css/slide-left.css'
 import '../css/slide-right.css'
+import { ExtendedCSSTransitionClassNames, ModalOptions } from 'types'
+import { getInitialClassName } from './consts'
 
-export type CssTransitionPropTypes = {
-  enterClassName: string
-  exitClassName: string
-}
 export type TransitionProps = {
   children: React.ReactNode
   onEnd: () => void
-  shouldClose: boolean
+  isIn: boolean
   elementRef: React.RefObject<HTMLElement>
+  duration: ModalOptions['duration']
 }
 
-export function cssTransition({ enterClassName, exitClassName }: CssTransitionPropTypes) {
-  return function Transition({ children, onEnd = () => {}, shouldClose, elementRef }: TransitionProps) {
-    const hasEnterAnimationHappened = useRef<boolean>(false)
-
-    useLayoutEffect(() => {
+export function cssTransitionGenerator({ classNames }: { classNames: ExtendedCSSTransitionClassNames | string }) {
+  return function Transition({ children, onEnd, isIn, elementRef, duration }: TransitionProps) {
+    const onEntered = () => {
       const element = elementRef.current
-      if (!element || hasEnterAnimationHappened.current) return
-      hasEnterAnimationHappened.current = true
-
-      const onEntered = () => {
-        element.removeEventListener('animationend', onEntered)
-        element.removeEventListener('animationcancel', onEntered)
-        element.classList.remove(enterClassName)
+      const initialClassName = getInitialClassName(classNames)
+      if (element) {
+        element.classList.remove(initialClassName)
       }
+    }
 
-      const onEnter = () => {
-        element.classList.add(enterClassName)
-        element.addEventListener('animationend', onEntered)
-        element.addEventListener('animationcancel', onEntered)
-      }
-
-      onEnter()
-    }, [])
-
-    useEffect(() => {
-      if (!shouldClose || !elementRef.current) return
-      const element = elementRef.current
-
-      const onExited = () => {
-        element.removeEventListener('animationend', onExited)
-        onEnd()
-      }
-
-      const onExit = () => {
-        element.className += ` ${exitClassName} react_modal_animate_fill_both`
-        element.addEventListener('animationend', onExited)
-      }
-
-      onExit()
-    }, [shouldClose])
-
-    return children
+    return (
+      <CSSTransition
+        classNames={classNames}
+        in={isIn}
+        timeout={duration ?? 250}
+        onEntered={onEntered}
+        onExited={onEnd}
+        nodeRef={elementRef}
+      >
+        {children}
+      </CSSTransition>
+    )
   }
 }

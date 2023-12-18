@@ -16,25 +16,28 @@ export const Modal = <T extends ModalReturnProps & UnknownProps>(
   const duration = options?.duration ?? 250
   const backgroundColor = options?.backgroundColor ?? 'rgba(0, 0, 0, 0.5)'
   const zIndex = options?.zIndex ?? 1000
-  const animationType = options?.animationType ?? 'fade'
   const noScroll = options?.noScroll ?? false
   const timingFunction = options?.timingFunction ?? 'ease-in-out'
   const Fallback = options?.fallback ?? options?.Spinner ?? <div className="spinner" />
 
+  const animationType = options?.animationType ?? options?.customAnimation !== undefined ? 'none' : 'fade'
+  const customAnimation = options?.customAnimation ?? undefined
+
   return ({ closeModal: removeModal, ...props }: T) => {
-    const { closeModal, shouldClose, modalRef } = useModalLogic({ removeModal, duration, noScroll })
+    const { closeModal, isIn, modalRef } = useModalLogic({ duration, noScroll })
 
     return (
       <ModalBackground
         timingFunction={timingFunction}
         modalRef={modalRef}
-        shouldClose={shouldClose}
+        isIn={isIn}
         onTransitionEnd={removeModal}
         closeModal={closeModal}
         duration={duration}
         backgroundColor={backgroundColor}
         animationType={animationType}
         zIndex={zIndex}
+        customAnimation={customAnimation}
       >
         <Suspense fallback={Fallback}>
           <WrappedComponent {...props} closeModal={closeModal} />

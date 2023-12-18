@@ -1,25 +1,37 @@
-import { AnimationType } from 'types'
+import { AnimationType, ExtendedCSSTransitionClassNames } from 'types'
 
-type TypeAnimationTypeMapper = Record<
-  AnimationType,
-  { enterClassName: string; exitClassName: string; className: string }
->
+type MapperAnimationType = {
+  classNames: string | ExtendedCSSTransitionClassNames
+  parentClassName?: string
+}
 
-export const animationTypeMapper: TypeAnimationTypeMapper = {
-  none: { enterClassName: '', exitClassName: '', className: '' },
+type TypeAnimationTypeMapper = Record<AnimationType, MapperAnimationType>
+
+export const animationsClassNamesMapper: TypeAnimationTypeMapper = {
+  none: {
+    classNames: ''
+  },
+
   fade: {
-    enterClassName: 'react_modal_fadeIn',
-    exitClassName: 'react_modal_fadeOut',
-    className: 'react_modal_page_center'
+    classNames: 'react_modal_fade',
+    parentClassName: 'react_modal_page_center'
+  },
+  'fade-with-scale': {
+    classNames: 'react_modal_fade_with_scale',
+    parentClassName: 'react_modal_page_center'
   },
   'slide-left': {
-    enterClassName: 'react_modal_slideInLeft',
-    exitClassName: 'react_modal_slideOutLeft',
-    className: 'react_modal_page_start'
+    classNames: 'react_modal_slide_left',
+    parentClassName: 'react_modal_page_start'
   },
   'slide-right': {
-    enterClassName: 'react_modal_slideInRight',
-    exitClassName: 'react_modal_slideOutRight',
-    className: 'react_modal_page_end'
+    classNames: 'react_modal_slide_right',
+    parentClassName: 'react_modal_page_end'
   }
+}
+
+export const getInitialClassName = (classNames?: ExtendedCSSTransitionClassNames | string) => {
+  if (typeof classNames === 'string') return `${classNames}-initial`
+  if (classNames?.initial) return classNames.initial
+  return ''
 }
