@@ -1,5 +1,5 @@
 import React from 'react'
-import { AnimationType, ExtendedCSSTransitionClassNames } from 'types'
+import { AnimationType, ExtendedCSSTransitionClassNames } from '../types'
 import { animationsClassNamesMapper } from '../utils/consts'
 import { cssTransitionGenerator } from '../utils/cssTransition'
 
