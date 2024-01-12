@@ -17,8 +17,6 @@ export type TransitionProps = {
 
 export function cssTransitionGenerator({ classNames }: { classNames: ExtendedCSSTransitionClassNames | string }) {
   return function Transition({ children, onEnd, isIn, elementRef, duration }: TransitionProps) {
-    console.log({ children, classNames, elementRef, isIn, duration })
-
     const onEntered = () => {
       const element = elementRef.current
       const initialClassName = getInitialClassName(classNames)

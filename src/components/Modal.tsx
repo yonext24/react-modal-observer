@@ -31,12 +31,6 @@ export const Modal = <T extends ModalReturnProps & UnknownProps>(
   })()
   const customAnimation = options?.customAnimation ?? undefined
 
-  console.log('///////////////////////')
-  console.log(options?.animationType)
-  console.log(options?.animationType ?? options?.customAnimation !== undefined ? 'none' : 'fade')
-  console.log(animationType)
-  console.log('///////////////////////')
-
   return ({ closeModal: removeModal, ...props }: T) => {
     const { closeModal, isIn, modalRef } = useModalLogic({ duration, noScroll })
 

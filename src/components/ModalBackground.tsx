@@ -39,17 +39,12 @@ export function ModalBackground({
       }
     }
 
-    console.log('is not custom animation')
     return animationMapper[animationType]
   }, [customAnimation, animationType])
-
-  console.log({ animationType, TransitionComponent })
 
   const initialClassName = getInitialClassName(classNames)
   const modalContainerRef = React.useRef<HTMLDivElement>(null)
   const backgroundRef = React.useRef<HTMLDivElement>(null)
-
-  console.log({ containerRef: modalContainerRef, backgroundRef })
 
   return (
     <div

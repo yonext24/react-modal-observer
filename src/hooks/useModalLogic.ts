@@ -18,7 +18,6 @@ export function useModalLogic({ duration = 250, noScroll = false }: UseModalLogi
   const hasStartAnimationEnded = useRef<boolean>(false)
 
   const closeModal = useCallback(() => {
-    console.log('transitionEnded')
     setIsIn(false)
   }, [setIsIn])
 
