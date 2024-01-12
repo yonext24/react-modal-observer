@@ -57,10 +57,13 @@ export function useModalLogic({ duration = 250, noScroll = false }: UseModalLogi
     let previousPaddingRight: string | null = null
 
     if (noScroll) {
+      const hasScroll = html.scrollHeight > html.clientHeight
+
       previousOverflow = html.style.overflow
       previousPaddingRight = html.style.paddingRight
+
       html.style.overflow = 'hidden'
-      html.style.paddingRight = '15px'
+      if (hasScroll) html.style.paddingRight = '15px'
     }
 
     return () => {
