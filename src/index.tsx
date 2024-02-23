@@ -32,7 +32,8 @@ export function Modals({
   noScroll: rootNoScroll,
   timingFunction: rootTimingFunction,
   Spinner: rootSpinner,
-  customAnimation: rootCustomAnimation
+  customAnimation: rootCustomAnimation,
+  overflowElement
 }: ModalOptions) {
   const [modals, setModals] = useState<Array<ComponentTypeWithIdAndOptions>>([])
 
@@ -63,7 +64,8 @@ export function Modals({
           noScroll: modalOptions.noScroll ?? rootNoScroll,
           timingFunction: modalOptions.timingFunction ?? rootTimingFunction,
           Spinner: modalOptions.Spinner ?? rootSpinner,
-          customAnimation: modalOptions.customAnimation ?? rootCustomAnimation
+          customAnimation: modalOptions.customAnimation ?? rootCustomAnimation,
+          overflowElement
         }
 
         const localRemoveModal = () => {

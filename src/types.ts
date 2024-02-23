@@ -45,6 +45,7 @@ export interface ModalOptions extends ModalBackgroundBaseProps {
   fallback?: ReactNode
   Spinner?: ReactNode
   customAnimation?: CustomAnimationType
+  overflowElement?: () => HTMLElement
 }
 
 export interface ExtendedCSSTransitionClassNames extends CSSTransitionClassNames {

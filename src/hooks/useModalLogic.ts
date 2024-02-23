@@ -6,9 +6,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 interface UseModalLogicProps {
   duration?: number
   noScroll?: boolean
+  overflowElement?: () => HTMLElement
 }
 
-export function useModalLogic({ duration = 250, noScroll = false }: UseModalLogicProps) {
+export function useModalLogic({ duration = 250, noScroll = false, overflowElement }: UseModalLogicProps) {
   const [isIn, setIsIn] = useState<boolean>(false)
 
   useEffect(() => {
@@ -38,6 +39,8 @@ export function useModalLogic({ duration = 250, noScroll = false }: UseModalLogi
   }, [modalRef.current])
 
   useEffect(() => {
+    const element = overflowElement ? overflowElement() : document.body
+
     const timeoutId = setTimeout(() => {
       hasStartAnimationEnded.current = true
     }, duration)
@@ -51,27 +54,25 @@ export function useModalLogic({ duration = 250, noScroll = false }: UseModalLogi
 
     window.addEventListener('keydown', handleKeyDown)
 
-    const html = document.querySelector('html') as HTMLHtmlElement
-
     let previousOverflow: string | null = null
     let previousPaddingRight: string | null = null
 
     if (noScroll) {
-      const hasScroll = html.scrollHeight > html.clientHeight
+      const hasScroll = element.scrollHeight > element.clientHeight
 
-      previousOverflow = html.style.overflow
-      previousPaddingRight = html.style.paddingRight
+      previousOverflow = element.style.overflow
+      previousPaddingRight = element.style.paddingRight
 
-      html.style.overflow = 'hidden'
-      if (hasScroll) html.style.paddingRight = '15px'
+      element.style.overflow = 'hidden'
+      if (hasScroll) element.style.paddingRight = '15px'
     }
 
     return () => {
       clearTimeout(timeoutId)
       window.removeEventListener('keydown', handleKeyDown)
       if (noScroll) {
-        html.style.overflow = previousOverflow || 'auto'
-        html.style.paddingRight = previousPaddingRight || ''
+        element.style.overflow = previousOverflow || 'auto'
+        element.style.paddingRight = previousPaddingRight || ''
       }
     }
   }, [])

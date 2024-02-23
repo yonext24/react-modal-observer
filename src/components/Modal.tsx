@@ -32,7 +32,7 @@ export const Modal = <T extends ModalReturnProps & UnknownProps>(
   const customAnimation = options?.customAnimation ?? undefined
 
   return ({ closeModal: removeModal, ...props }: T) => {
-    const { closeModal, isIn, modalRef } = useModalLogic({ duration, noScroll })
+    const { closeModal, isIn, modalRef } = useModalLogic({ duration, noScroll, overflowElement: options?.overflowElement })
 
     return (
       <ModalBackground

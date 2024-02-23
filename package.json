@@ -1,6 +1,6 @@
 {
   "name": "react-modal-observer",
-  "version": "0.9.67",
+  "version": "0.9.68",
   "description": "Package to handle modals in react with javascript observer pattern.",
   "repository": {
     "type": "git",
