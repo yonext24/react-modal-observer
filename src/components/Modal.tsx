@@ -31,8 +31,12 @@ export const Modal = <T extends ModalReturnProps & UnknownProps>(
   })()
   const customAnimation = options?.customAnimation ?? undefined
 
-  return ({ closeModal: removeModal, ...props }: T) => {
-    const { closeModal, isIn, modalRef } = useModalLogic({ duration, noScroll, overflowElement: options?.overflowElement })
+  return ({ closeModal: removeModal, resolve, ...props }: T) => {
+    const { closeModal, isIn, modalRef } = useModalLogic({
+      duration,
+      noScroll,
+      overflowElement: options?.overflowElement
+    })
 
     return (
       <ModalBackground
@@ -46,9 +50,10 @@ export const Modal = <T extends ModalReturnProps & UnknownProps>(
         animationType={animationType}
         zIndex={zIndex}
         customAnimation={customAnimation}
+        id={options?.id}
       >
         <Suspense fallback={Fallback}>
-          <WrappedComponent {...props} closeModal={closeModal} />
+          <WrappedComponent {...props} closeModal={closeModal} resolve={resolve} />
         </Suspense>
       </ModalBackground>
     )

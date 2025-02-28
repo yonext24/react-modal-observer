@@ -20,7 +20,7 @@ export function useModalLogic({ duration = 250, noScroll = false, overflowElemen
 
   const closeModal = useCallback(() => {
     setIsIn(false)
-  }, [setIsIn])
+  }, [])
 
   const modalRef = useRef<HTMLDivElement>(null)
 
@@ -30,7 +30,7 @@ export function useModalLogic({ duration = 250, noScroll = false, overflowElemen
       try {
         if (!modalRef.current?.contains(document.activeElement)) {
           // eslint-disable-next-line no-extra-semi
-          ;(document.activeElement as HTMLElement).blur()
+          ; (document.activeElement as HTMLElement).blur()
         }
       } catch {
         // ignore

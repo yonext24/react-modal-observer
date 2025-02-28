@@ -1,6 +1,6 @@
 {
   "name": "react-modal-observer",
-  "version": "0.9.68",
+  "version": "0.9.69",
   "description": "Package to handle modals in react with javascript observer pattern.",
   "repository": {
     "type": "git",
@@ -20,15 +20,18 @@
     "react": "18.2.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.21.0",
     "@types/react": "^18.2.39",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
     "copyfiles": "^2.4.1",
-    "eslint": "^8.54.0",
-    "eslint-plugin-react": "^7.33.2",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^16.0.0",
     "prettier": "^3.1.0",
     "rimraf": "^5.0.5",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.2",
+    "typescript-eslint": "^8.25.0"
   },
   "dependencies": {
     "@types/react-transition-group": "^4.4.10",

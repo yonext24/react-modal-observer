@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { createDeferred } from './utils/deferred'
 import { ComponentType, ComponentTypeWithIdAndOptions, ModalOptions } from './types'
 
 let modalCount = 1
@@ -30,20 +31,35 @@ export class ModalObserver {
     this.subscribers.forEach((subscriber) => subscriber(data))
   }
 
-  add = (Component: ComponentType<any>, options?: ModalOptions, id?: string | number) => {
+  add = <P extends unknown>(
+    Component: ComponentType<any>,
+    options?: ModalOptions,
+    id?: string | number
+  ): Promise<P> => {
+    const def = createDeferred<P>()
     const modalId = id ?? modalCount++
 
-    const modal = { ...Component, id: modalId, options }
+    const modal = { ...Component, def, id: modalId, options }
 
     this.notify({ ...modal, type: 'add' })
     this.modals = [modal, ...this.modals]
+
+    return def.promise
+  }
+
+  resolve = <P extends unknown>(id: string | number, value: P) => {
+    const indexOfModal = this.modals.findIndex((modal) => modal.id === id)
+    const modal = this.modals[indexOfModal]
+
+    modal.def.resolve(value)
   }
 
   remove = (id: string | number) => {
     const indexOfModal = this.modals.findIndex((modal) => modal.id === id)
     const modal = this.modals[indexOfModal]
 
-    this.modals = this.modals.filter((modal) => modal.id !== indexOfModal)
+    const newModals = this.modals.filter((_, i) => i !== indexOfModal)
+    this.modals = newModals
     this.notify({ ...modal, type: 'remove' })
   }
 }

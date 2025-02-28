@@ -17,12 +17,20 @@ export type ComponentType<Props = UnknownProps> = {
   props: Omit<Props, 'closeModal'>
 }
 
-export type ComponentTypeWithIdAndOptions<T = UnknownProps> = ComponentType<T> & { id: string | number } & {
+export type Def<P> = {
+  promise: Promise<P>
+  resolve: (value: P | PromiseLike<P>) => void
+  reject: (reason?: any) => void
+}
+
+export type ComponentTypeWithIdAndOptions<T = UnknownProps, P = any> = ComponentType<T> & { id: string | number } & {
   options?: ModalOptions
+  def: Def<P>
 }
 
 export interface ModalReturnProps {
   closeModal: () => void
+  resolve?: (value: any) => void
 }
 
 export type AnimationType = 'fade' | 'fade-with-scale' | 'none' | 'slide-left' | 'slide-right'
@@ -46,6 +54,7 @@ export interface ModalOptions extends ModalBackgroundBaseProps {
   Spinner?: ReactNode
   customAnimation?: CustomAnimationType
   overflowElement?: () => HTMLElement
+  id?: string | number
 }
 
 export interface ExtendedCSSTransitionClassNames extends CSSTransitionClassNames {

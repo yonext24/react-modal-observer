@@ -13,6 +13,7 @@ export interface ModalBackgroundProps extends ModalBackgroundBaseProps {
   isIn: boolean
   modalRef: React.RefObject<HTMLDivElement>
   customAnimation?: CustomAnimationType
+  id?: string | number
 }
 
 export function ModalBackground({
